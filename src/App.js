@@ -17,16 +17,15 @@ export default class App extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    const { query, pageNumber } = this.state;
+    const { query } = this.state;
     if (prevState.query !== query) {
       this.fetchPhotoCards();
     }
-    if (prevState.pageNumber !== pageNumber) {
-      window.scrollTo({
-        top: pageNumber * 1450,
-        behavior: 'smooth',
-      });
-    }
+
+    window.scrollTo({
+      top: window.scrollHeight,
+      behavior: 'smooth',
+    });
   }
 
   onSearch = query => {
@@ -52,12 +51,16 @@ export default class App extends Component {
         this.setState(state => ({
           photoCards: [...state.photoCards, ...photoCards],
           pageNumber: state.pageNumber + 1,
-          isLoading: false,
         }));
       })
       .catch(error => {
         this.setState({
           error,
+        });
+      })
+      .finally(() => {
+        this.setState({
+          isLoading: false,
         });
       });
   };
